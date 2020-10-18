@@ -1,0 +1,9 @@
+Due to the formats uploaded not being easily editable, I will just mark my comments here:
+
+Lab1a looks good to me
+
+In Lexic, at the Special Symbols > Operators part, the last "==" should be in the (comparison) segment. The identifiers look ok. In the constants, at the "string" part, I think "stringformat" is useless, because you could use "string=char{string}".
+
+Looks like Token is correct.
+
+In Syntax, at the ifstmt I think the else should be optional, so between {} instead of []. Other than that, I can't find any other mistakes.
