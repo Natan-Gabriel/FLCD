@@ -1,0 +1,12 @@
+print("Please input n-the number of integers you want to compute the sum of")
+int n;
+n=read();
+int sum;
+sum=0;
+int input;
+for(int i=1;i<=n;i=i+1){
+ input=read();
+ sum=sum+input;
+}
+print("The sum of the given numbers is: ");
+print(sum);

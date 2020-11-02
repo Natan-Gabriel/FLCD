@@ -40,8 +40,18 @@ class HashTable:
         else: #the currentList is not empty and the element is present in the list
             return (hashValue,currentList.index(elem))
 
+    # def __str__(self):
+    #     return str(self.__elems)
     def __str__(self):
-        return str(self.__elems)
+        resultString=""
+        resultString += "Position in ST ->  Token  " + "\n"
+        for i in range(0,len(self.__elems)):
+            if self.__elems[i]!=[]:
+                for j in range(0,len(self.__elems[i])):
+                    resultString=resultString+"("+str(i)+","+str(j)+")"+"  ->  "+str(self.__elems[i][j])+"\n"
+        return resultString
+
+
 
 
 class SymbolTable:
@@ -53,44 +63,86 @@ class SymbolTable:
         return str(self.__hashTable)
 
 
+# Warning! Our scanner returns an lexical error if it finds undefined tokens:
+# Pay attention and avoid usage of '“',tabs and comments in your programs!
 
 
 
+reservedWords = ["char", "int", "string", "boolean", "array", "for",
+                         "while", "if", "else", "elif", "of", "program", "read",
+                         "print"]
+operators = ["+", "-", "*", "/", "%", "<", "<=", ">=", ">", "!=", "=", "==",
+                     "&&", "||", "!"]
+extendedOperators = operators + ["&", "|"]
+separators = ["(", ")", "[", "]", "{", "}", ";", " "]
 
+digits = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 
-reservedWords=["char","int","string","boolean","array","for",
-               "while","if","else","elif","of","program","read",
-               "print"]
-operators=["+","-","*","/","%","<","<=",">=",">","!=","=","==",
-           "&&","||","!"]
-separators=["(",")","[","]","{","}",";"," "]
-
-tokens={}
+tokens = {}
 file = open('token.in', 'r')
-#print(file.read().splitlines())
+# print(file.read().splitlines())
 for i in file.read().splitlines():
-    x=i.split(" ")
-    tokens[x[0]]=x[1]
+    x = i.split(" ")
+    if x[0] == "space":
+        tokens[' '] = x[1]
+    else:
+        tokens[x[0]] = x[1]
 
-print(tokens)
+
+# print(tokens)
+#
+# print(");")
+# print(")" in separators)
+# print(";" in separators)
+
+# Before and after:
+# -constants:separators,operators;
+# -identifiers:separators,operators;
+# -reserved words:separators
+# -operators:separators,constants,identifiers
+# -separators:separators,operators,reserved words,constants,identifiers
+#
+# ?
+
 
 class PIF:
     def __init__(self):
-        self.__pif={}
+        self.__pif=[]
     def genPIF(self,token,index):
-        self.__pif[token]=index
+        self.__pif.append([token,index])
+    # def __str__(self):
+    #     return str(self.__pif)
     def __str__(self):
-        return str(self.__pif)
+        resultString=""
+        resultString += "Token Code  ->  Position in ST   "+"\n"
+        for i in self.__pif:
+            resultString+=str(i[0])+"  ->  "+str(i[1])+"\n"
+        return resultString
 
-class Scanner():
+
+class Scanner:
     def __init__(self,filename):
         self.__st=SymbolTable()
         self.__pif=PIF()
-        #self.__filename=filename
+        self.__filename=filename
+
+
     def getST(self):
         return str(self.__st)
     def getPIF(self):
         return str(self.__pif)
+
+    def isOperator(self,line,index): #look-ahead
+        if ( index+1<len(line) ) and ( line[index] in operators ) and ( line[index+1] in operators ) and ( line[index]+line[index+1] in operators ):
+            if (index+2==len(line)) or (line[index+2] in separators) or (line[index+2]=='"') or (line[index+2] in digits) or containsLetters(line[index+2]):
+                return True
+        elif line[index] in operators:
+            if (index+1==len(line)) or (line[index+1] in separators) or (line[index+1]=='"') or (line[index+1] in digits) or containsLetters(line[index+1]):
+                return True
+        elif ( index+1<len(line) ) and ( (line[index]+line[index+1]) in operators ):
+            if (index + 2 == len(line)) or (line[index + 2] in separators) or (line[index + 2] == '"') or (line[index + 2] in digits) or containsLetters(line[index + 2]):
+                return True
+        return False
 
     def getOperator(self,line,index): #look-ahead
         if ( index+1<len(line) ) and ( line[index] in operators ) and ( line[index+1] in operators ) and ( line[index]+line[index+1] in operators ):
@@ -122,6 +174,15 @@ class Scanner():
                 return tokens[word], line, index
         return tokens[word],line,index
 
+
+    def isNumber(self, line, index):
+        while len(line)>index and line[index]  in ["0","1","2","3","4","5","6","7","8","9"]:
+            index += 1
+        if (len(line)==index) or (line[index] in separators) or (line[index] in operators):
+            return True
+        return False
+
+
     def getNumber(self, line, index):
         number = ""
 
@@ -130,6 +191,16 @@ class Scanner():
             index += 1
         return number,line, index
 
+
+    def isString(self,line,index):
+        index+=1
+        while len(line)>index:
+            if line[index]=='"':
+                if (len(line) == index + 1) or (line[index + 1] in separators) or (line[index + 1] in operators):
+                    return True
+            index+=1
+        return False
+
     def getString(self,line,index):
         resultString=""
         # resultString="'"
@@ -137,7 +208,16 @@ class Scanner():
         while len(line)>index and line[index]!='"':
             resultString+=line[index]
             index+=1
+        if len(line)>index and line[index]=='"':
+            index+=1
         return resultString,line,index
+
+    def isIdentifier(self,line,index):
+        while len(line)>index and containsLettersOrDigits(line[index]):
+            index += 1
+        if (len(line)==index) or (line[index] in separators) or (line[index] in operators):
+            return True
+        return False
 
     def getIdentifier(self,line,index):
         resultIdentifier=""
@@ -146,16 +226,23 @@ class Scanner():
             index += 1
         return resultIdentifier,line, index
 
+    def getErrorToken(self,line,index):
+        resultString=""
+        while len(line)>index and (line[index] not in separators): #and (line[index] not in operators):
+            resultString+=line[index]
+            index+=1
+        return resultString
 
     def getTokensByLine(self,line,linenumber):
-        tokensInLine={}
+        #tokensInLine={}
         index=0
         while index<len(line):
-            print("line")
+            #print("line")
             if line[index] in separators:  # is separator
-                self.__pif.genPIF(line[index], 0)
+                self.__pif.genPIF(tokens[line[index]], 0)
+                #print("adding "+line[index] +" to separators")
                 index+=1
-            elif line[index] in operators or line[index] in ["&","|"]: #is operator
+            elif line[index] in extendedOperators and self.isOperator(line,index): #is operator
                 token,line, index = self.getOperator(line, index)
                 #tokensInLine[token]=self.__st.pos(token)
                 self.__pif.genPIF(token, 0)
@@ -164,96 +251,56 @@ class Scanner():
                 #tokensInLine[token] = self.__st.pos(token)
                 self.__pif.genPIF(token, 0)
 
+
             #now searching for constants and identifiers
-            elif line[index]=='"':  #is steing constant
+            elif line[index]=='"' and self.isString(line,index):  #is string constant
                 token,line,index=self.getString(line,index)
                 #tokensInLine[0] = self.__st.pos(token)
                 ind=self.__st.pos(token)
-                self.__pif.genPIF(token, ind)
-            elif line[index] in ["0","1","2","3","4","5","6","7","8","9"]: #is numeric constant
+                self.__pif.genPIF(tokens['Constant'], ind)
+            elif line[index] in digits and self.isNumber(line,index): #is numeric constant
                 token,line,index=self.getNumber(line,index)
                 #tokensInLine[0] = self.__st.pos(token)
                 ind = self.__st.pos(token)
-                self.__pif.genPIF(token, ind)
-            elif containsLetters(line[index]) : #is identifier
+                self.__pif.genPIF(tokens['Constant'], ind)
+            elif containsLetters(line[index]) and self.isIdentifier(line,index) : #is identifier
                 token,line, index = self.getIdentifier(line, index)
                 #tokensInLine[1] = self.__st.pos(token)
                 ind = self.__st.pos(token)
-                self.__pif.genPIF(token, ind)
+                self.__pif.genPIF(tokens['Identifier'], ind)
             else:
-                print("Lexical error in line",linenumber,"starting at index",index)
-        return tokensInLine
+                errorToken=self.getErrorToken(line,index)
+                return -1,linenumber,index,errorToken
+        return 1,1,1,1
+        #return tokensInLine
 
     def getTokens(self):
         lineNumber=1
         finalTokens={}
-        f = open('p1.in', 'rb')
+        f = open(self.__filename, 'rb')
         for line in f.read().splitlines():
-            self.getTokensByLine(line.decode("utf-8"),lineNumber)
+            res,linenumber,index,errorToken=self.getTokensByLine(line.decode("utf-8"),lineNumber)
+            if res==-1:
+                print("Lexical error in line "+str(linenumber)+",starting at index "+str(index)+".The token is: "+str(errorToken))
+                return
             lineNumber+=1
         #print(finalTokens)
+        print("The program is lexically correct")
+        f.close()
+        f = open("PIF.out", "w")
+        f.write(self.getPIF())
+        f.close()
+        f = open("ST.out", "w")
+        message = "I have a unique symbol table for identifiers and constants,represented as a hash table\n"
+        f.write(message+self.getST())
+        f.close()
 
 
 
-print("inceput")
 scanner = Scanner('p1.in')
-
-# print(scanner.getOperator('==',0)) #print 27
-# print(scanner.getOperator('= = aaa',0)) #print 26
-#
-# print(scanner.getReservedWord('if ana',0)) #print 9
-# print(scanner.getReservedWord('if for',3)) #print 7
-#
-# print(scanner.getIdentifier('iii ana',0)) #print 9
-# print(scanner.getIdentifier('if frj',3)) #print 7
-#
-# print(scanner.getNumber("3333 aaa",0)) #print 9
-# print(scanner.getNumber('if 222',3)) #print 7
-#
-# print(scanner.getString('"iii" ana',0)) #print 9
-# print(scanner.getString('if "frj"',3)) #print 7
-#
-# #print(scanner.getTokensByLine('{[]}();== = >= for if "aaaa" 2345  if'))
-# print(scanner.getTokensByLine('if(a>=b && a>=c){',1))
-# print(scanner.getTokensByLine('print("the maximum number is a");',1))
-# print(scanner.getTokensByLine('}',1))
-# #print(scanner.getTokensByLine('int a=read ();'))
-
-
 scanner.getTokens()
 print("PIF: ",scanner.getPIF())
 print("ST: ",scanner.getST())
-print("final")
-# file = open('p1.in', 'rb')
-# for i in file.read().splitlines():
-#     print(i.decode("utf-8") )
-#
-# print(tokens)
-
-
-
-
-
-
-def test():
-    hashTable = HashTable(128)
-    print(hashTable.add(33))
-    print(hashTable.add(4))
-    print(hashTable.add(6))
-    print(hashTable.add(5))
-    print(hashTable.add(5))
-    print(hashTable.add("ana"))
-    print(hashTable.add("ana"))
-    print(hashTable.add(0))
-    print(hashTable.add(0))
-    print(hashTable.add("7y"))
-
-
-
-# test()
-# # print('a' in ['a'-'z'])
-# print(not re.search(r'[^a-zA-Z0-9. ]', 'ana'))
-
 
 
 

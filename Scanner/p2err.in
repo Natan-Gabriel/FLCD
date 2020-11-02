@@ -1,0 +1,13 @@
+int a;
+a=read();
+int b;
+b=read();
+if(a%2!=0 || b%2!=0){
+ print("you have to input 2 even numbers");
+}
+else{
+ int c;
+ c=(a++b)/2;
+ print("The arithmetic average of the given two even numbers is: ");
+ print(c);
+}
