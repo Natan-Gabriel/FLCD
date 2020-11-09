@@ -1,0 +1,9 @@
+I have a unique symbol table for identifiers and constants,represented as a hash table
+Position in ST ->  Token  
+(47,0)  ->  The arithmetic average of the given two even numbers is: 
+(48,0)  ->  0
+(48,1)  ->  you have to input 2 even numbers
+(50,0)  ->  2
+(97,0)  ->  a
+(98,0)  ->  b
+(99,0)  ->  c

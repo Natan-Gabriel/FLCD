@@ -1,0 +1,5 @@
+Q = {p,q,r} ;
+E = {a,b} ;
+S = { p : a ->q , p:b->r , q:b->r , r:b->p , r:a->r } ;
+q0 = { p } ;
+F= { r } ;
