@@ -88,7 +88,7 @@ class FiniteAutomata:
 
 
 def menu():
-    fa = FiniteAutomata("FA.in")
+    fa = FiniteAutomata("FAIntegerConstant.in")
     while True:
         print("Choose a case")
         print("1.Display the set of states")
@@ -119,8 +119,6 @@ def menu():
             print("Invalid case")
 
 
-menu()
-
 
 faExample = FiniteAutomata("FA.in")
 assert faExample.isAccepted("bbbbbbbaaaa") == True
@@ -131,4 +129,21 @@ assert faExample.isAccepted("abbaaaaaaaa") == False
 assert faExample.isAccepted("ababaaaaaaaa") == False
 
 
+FAIntegerConstant = FiniteAutomata("FAIntegerConstant.in")
+assert FAIntegerConstant.isAccepted("-123") == True
+assert FAIntegerConstant.isAccepted("0") == True
+assert FAIntegerConstant.isAccepted("1") == True
+assert FAIntegerConstant.isAccepted("-0") == False
+assert FAIntegerConstant.isAccepted("01") == False
+
+FAIdentifier = FiniteAutomata("FAIdentifier.in")
+assert FAIdentifier.isAccepted("id") == True
+assert FAIdentifier.isAccepted("ID012345") == True
+assert FAIdentifier.isAccepted("1asdf") == False
+assert FAIdentifier.isAccepted("-1asdf") == False
+
+print("Tests were successful")
+
+
+menu()
 
