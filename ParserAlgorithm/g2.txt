@@ -1,0 +1,65 @@
+N = {{program,decllist,declaration,type1,arraydecl,type,stmtlist,
+    stmt,simplstmt,assignstmt,expression,term,factor,iostmt,structstmt,
+     ifstmt, whilestmt,simplecondition,condition,LogicOPERATOR,RELATION }} ;;
+E = {{ + , -, *, /  ,% ,(arithmetic) , < , <=  , >=  ,>  , != ,  =,    &&, || , !  , == ,
+     (,), [ ,] ,{, } ,  ; , space,
+     char ,int,  string , boolean, array  ,  for, while, if,  else  ,elif ,  of ,program, read, print  }} ;;
+
+P = {{ program ->  stmtlist ,
+
+decllist -> declaration | declaration ";" decllist ,
+
+declaration -> type  IDENTIFIER  “;” ,
+
+type1 -> "BOOLEAN" | "STRING" | "INTEGER"  ,
+
+arraydecl -> "ARRAY" "(" type1 ")"  "[" const "]"  ,
+
+type -> type1|arraydecl ,
+
+stmtlist -> stmt | stmt ";" stmtlist ,
+
+stmt -> simplstmt | structstmt  ,
+
+simplstmt  -> assignstmt | iostmt |  decllist ,
+
+assignstmt  -> IDENTIFIER "=" expression “;” ,
+
+expression  -> expression "+" term | expression "-" term | term ,
+
+term  -> term "*" factor | term "/" factor  | factor ,
+
+factor  -> "(" expression ")" | IDENTIFIER | const  ,
+
+iostmt  ->  (  ("READ" | "READINTEGER") “()”  “;”) | "PRINT" "(" (IDENTIFIER | INTEGER | STRING)  ")" “;” ,
+
+structstmt  -> cmpdstmt | ifstmt | whilestmt ,
+
+ifstmt  -> "IF” “(" condition ")" “{” stmt “}” { "ELIF” “(" condition “)”  “{” stmt “}”  }  ["ELSE" “{” stmt “}” ] ,
+
+whilestmt  -> "WHILE" “(” condition “)” "{" stmt “}” ,
+
+simplecondition  -> expression RELATION expression ,
+condition  -> simplecondition {LogicOPERATOR simplecondition} ,
+LogicOPERATOR -> “&&”  | “||” ,
+
+RELATION -> "<" | "<=" | "=" |”==” | "!=" | ">=" | ">" ,
+
+ identifier -> letter | letter{letter | digit} ,
+ letter -> "A" | "B" | . ..| "Z" | “a”|”b” | .. | “z” ,
+ digit -> "0" | "1" |...| "9" ,
+
+ nonzerodigit -> "1" |...| "9" ,
+const-> 0| "+"no|"-"no|no ,
+no-> nonzerodigit { digit },
+
+character -> 'letter'|'digit',
+
+string -> "stringformat",
+stringformat -> char{ stringformat },
+char -> letter|digit
+
+
+    }} ;;
+
+S = {{ program }} ;;
