@@ -91,7 +91,7 @@ class Grammar:
 
 
 def menu():
-    gr = Grammar("g2.txt")
+    gr = Grammar("g1.txt")
     while True:
         print("Choose a case")
         print("1.Display the nonterminals")
