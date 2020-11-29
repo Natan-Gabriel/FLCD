@@ -9,13 +9,13 @@ class RecDescParser:
 
 
     def expand(self):
-        elem = self.__inputStack.pop(0)
-        self.__workingStack.insert(0, elem)
-        self.__inputStack.insert(0, self.__grammar.getProductionsForAGivenNonTerminal(elem)[0])
+        elem = self.__inputStack.pop()
+        self.__workingStack.append(elem)
+        self.__inputStack.append(self.__grammar.getProductionsForAGivenNonTerminal(elem)[0])
 
     def advance(self):
         self.__i += 1
-        self.__inputStack.insert(0, self.__workingStack.pop(0))
+        self.__inputStack.append(self.__workingStack.pop())
 
     def momentaryInsuccess(self):
         self.__s="b"
@@ -31,26 +31,45 @@ class RecDescParser:
 
         listOfRHSProductions=self.__grammar.getProductionsForAGivenNonTerminal(AJ)
         if listOfRHSProductions[-1]!=deltaJ:
-            index=listOfRHSProductions.index(deltaJ)
             self.__s="q"
-            AJ=self.__workingStack.pop()
-            self.__workingStack.add(AJ)
-            deltaJ = self.__inputStack.pop()
-            self.__inputStack.add(deltaJ)
+            self.__workingStack.append(self.__workingStack.pop())
+            self.__inputStack.append(self.__inputStack.pop())
         else:
             if self.__i==1 and AJ==self.__grammar.getStartingSymbol():
                 self.__s="e"
             else:
-                AJ=self.__inputStack.pop()
-                #self.__workingStack.pop()
-                self.__workingStack.add(AJ)
-
-
-
-
+                self.__workingStack.append(self.__inputStack.pop())
 
     def success(self):
         self.__s = "f"
 
+    def parse(self, sequence):
+        w = sequence.split()
+        self.__inputStack.append(self.__grammar.getStartingSymbol)
+        while self.__s!="f" and self.__s!="e":
+            if self.__s == "q":
+                if len(self.__inputStack) == 0 and self.__i == w:
+                    self.success()
+                else:
+                    if self.__inputStack[-1] in self.__grammar.getNonTerminals():
+                        self.expand()
+                    else:
+                        if self.__workingStack[-1] == w[self.__i-1]:
+                            self.advance()
+                        else:
+                            self.momentaryInsuccess()
+            else:
+                if self.__s == "b":
+                    if self.__workingStack[-1] in self.__grammar.getTerminals():
+                        self.back()
+                    else:
+                        self.anotherTry()
+        if self.__s == "e":
+            print("ERROR")
+        else:
+            print("Accepted sequence")
+            self.buildOutput()
 
-
+    def buildOutput(self):
+        output = ParserOutput(self.__grammar, self.__workingStack)
+        output.printOutput()
