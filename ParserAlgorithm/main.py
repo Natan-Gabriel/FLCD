@@ -1,5 +1,5 @@
 import re
-
+from RecDescParser import RecDescParser
 
 class Grammar:
 
@@ -72,7 +72,7 @@ class Grammar:
                         # # lhsProductions=self.__productions[lhs]
                         # # lhsProductions.append(i.strip())
                         # self.__productions = self.__productions[lhs].extend([i.strip()])
-                        self.__productions = self.add_values_in_dict(self.__productions, lhs, [i.strip()])
+                        self.__productions = self.add_values_in_dict(self.__productions, lhs, [i.strip().split(" ")])
                         # print("self.__productions[lhs]",self.__productions[lhs])
                     # if lhs[1].strip() == "a-z":
                     #     for i in  list(string.ascii_lowercase):
@@ -92,6 +92,7 @@ class Grammar:
 
 def menu():
     gr = Grammar("g1.txt")
+    recDescParser= RecDescParser(gr)
     while True:
         print("Choose a case")
         print("1.Display the nonterminals")
@@ -99,7 +100,6 @@ def menu():
         print("3.Display all the productions")
         print("4.Display the productions for a given nonterminal")
         print("5.Display the starting symbol")
-
         print("6.Verify if a sequence is accepted by the gr")
         print("7.Exit")
         case = input()
@@ -109,11 +109,16 @@ def menu():
             print(gr.getTerminals())
         elif case == "3":
             print(gr.getProductions())
+            print(len(gr.getProductions()))
         elif case == "4":
             nonterminal=input("Input a nonterminal:")
             print(gr.getProductionsForAGivenNonTerminal(nonterminal))
+            print(len(gr.getProductionsForAGivenNonTerminal(nonterminal)))
         elif case == "5":
             print(gr.getStartingSymbol())
+        elif case == "6":
+            sequence = input("Input a sequence:")
+            print(recDescParser.parse(sequence))
         elif case == "7":
             break
         else:
