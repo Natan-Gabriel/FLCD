@@ -64,17 +64,6 @@ class RecDescParser:
     def success(self):
         self.__s = "f"
 
-    def getUsedProduction(self,AJ):
-        listOfRHSProductions = self.__grammar.getProductionsForAGivenNonTerminal(AJ)
-        result=[]
-        if result in listOfRHSProductions:
-            return result
-        for elem in self.__inputStack:
-            result.append(elem)
-            if result in listOfRHSProductions:
-                return result
-        #return result
-
 
 
     def parse(self, sequence):
