@@ -43,8 +43,7 @@ class RecDescParser:
     def success(self):
         self.__s = "f"
 
-    def parse(self, sequence):
-        w = sequence.split()
+    def parse(self, w):
         self.__inputStack.append(self.__grammar.getStartingSymbol)
         while self.__s!="f" and self.__s!="e":
             if self.__s == "q":
