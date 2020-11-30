@@ -9,14 +9,15 @@ class RecDescParser:
 
 
     def expand(self):
-        elem = self.__inputStack.pop()
+        elem = self.__inputStack.pop(0)
         self.__workingStack.append(elem)
         # self.__inputStack.append(self.__grammar.getProductionsForAGivenNonTerminal(elem)[0])
-        self.__inputStack.extend(reversed(self.__grammar.getProductionsForAGivenNonTerminal(elem)[0]))
+        for i in reversed(self.__grammar.getProductionsForAGivenNonTerminal(elem)[0]):
+            self.__inputStack.insert(0,i)
 
     def advance(self):
         self.__i += 1
-        self.__workingStack.append(self.__inputStack.pop())
+        self.__workingStack.append(self.__inputStack.pop(0))
 
     def momentaryInsuccess(self):
         self.__s="b"
@@ -24,27 +25,57 @@ class RecDescParser:
     def back(self):
         self.__i-=1
         a=self.__workingStack.pop()
-        self.__inputStack.append(a)
+        self.__inputStack.insert(0, a)
 
     def anotherTry(self):
         AJ=self.__workingStack[-1]
-        deltaJ=self.__inputStack[-1]
+        deltaJ=self.__inputStack[0]
 
-        listOfRHSProductions=self.__grammar.getProductionsForAGivenNonTerminal(AJ)
-        if listOfRHSProductions[-1]!=deltaJ:
+        AJ_splitted=AJ.split("_")
+        currIndex=0
+        if len(AJ_splitted)==2:
+            currIndex=int(AJ_splitted[1])
+        new_AJ=AJ_splitted[0]+"_"+str((currIndex+1))
+
+        listOfRHSProductions=self.__grammar.getProductionsForAGivenNonTerminal(AJ[0])
+        usedProduction = listOfRHSProductions[currIndex].copy()
+        if len(listOfRHSProductions)>currIndex+1:
             self.__s="q"
-            #self.__workingStack.append(self.__workingStack.pop())
-            currIndex=listOfRHSProductions.index(self.__inputStack.pop())
-            self.__inputStack.append(listOfRHSProductions[currIndex+1])
+            while usedProduction!=[]:
+                self.__inputStack.pop(0)
+                usedProduction.pop(0)
+
+            for i in reversed(listOfRHSProductions[currIndex+1]):
+                self.__inputStack.insert(0, i)
+            # self.__inputStack.insert(0,listOfRHSProductions[currIndex+1])
+            self.__workingStack.pop()
+            self.__workingStack.append(new_AJ)
         else:
-            if self.__i==1 and AJ==self.__grammar.getStartingSymbol():
+            if self.__i==1 and AJ_splitted[0]==self.__grammar.getStartingSymbol():
                 self.__s="e"
             else:
-                self.__inputStack.pop()
-                self.__inputStack.append(self.__workingStack.pop())
+                while usedProduction != []:
+                    self.__inputStack.pop(0)
+                    usedProduction.pop(0)
+                # self.__inputStack.pop()
+                self.__workingStack.pop()
+                self.__inputStack.insert(0,AJ_splitted[0])
 
     def success(self):
         self.__s = "f"
+
+    def getUsedProduction(self,AJ):
+        listOfRHSProductions = self.__grammar.getProductionsForAGivenNonTerminal(AJ)
+        result=[]
+        if result in listOfRHSProductions:
+            return result
+        for elem in self.__inputStack:
+            result.append(elem)
+            if result in listOfRHSProductions:
+                return result
+        #return result
+
+
 
     def parse(self, sequence):
         w = sequence.split()
@@ -59,14 +90,14 @@ class RecDescParser:
                     self.success()
                     print("success")
                 else:
-                    if self.__inputStack[-1] in self.__grammar.getNonTerminals():
+                    if self.__inputStack[0] in self.__grammar.getNonTerminals():
 
                         self.expand()
                         print("expand")
                         print("self.__workingStack: ", self.__workingStack)
                         print("self.__inputStack: " , self.__inputStack)
                     else:
-                        if self.__inputStack[-1] == sequence[self.__i-1]:
+                        if self.__i-1<len(sequence) and self.__inputStack[0] == sequence[self.__i-1]:
                             self.advance()
                             print("advance")
                             print("self.__workingStack: ", self.__workingStack)
@@ -76,9 +107,9 @@ class RecDescParser:
                             print("momentaryInsuccess")
                             print("self.__workingStack: ", self.__workingStack)
                             print("self.__inputStack: ", self.__inputStack)
-            else:
+            elif len(self.__workingStack)>0:
                 if self.__s == "b":
-                    if self.__workingStack[-1] in self.__grammar.getTerminals():
+                    if  self.__workingStack[-1] in self.__grammar.getTerminals():
                         self.back()
                         print("back")
                         print("self.__workingStack: ", self.__workingStack)
@@ -93,7 +124,7 @@ class RecDescParser:
         else:
             print("Accepted sequence")
             print(self.__workingStack)
-            self.buildOutput()
+            #self.buildOutput()
 
     def buildOutput(self):
         output = ParserOutput(self.__grammar, self.__workingStack)

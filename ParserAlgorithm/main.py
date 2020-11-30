@@ -91,7 +91,7 @@ class Grammar:
 
 
 def menu():
-    gr = Grammar("g1.txt")
+    gr = Grammar("Seminar7.txt")
     recDescParser= RecDescParser(gr)
     while True:
         print("Choose a case")
@@ -118,7 +118,7 @@ def menu():
             print(gr.getStartingSymbol())
         elif case == "6":
             sequence = input("Input a sequence:")
-            print(recDescParser.parse(sequence))
+            recDescParser.parse(sequence)
         elif case == "7":
             break
         else:
