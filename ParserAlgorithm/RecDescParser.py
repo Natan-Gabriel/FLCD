@@ -41,7 +41,7 @@ class RecDescParser:
             currIndex=int(AJ_splitted[1])
         new_AJ=AJ_splitted[0]+"_"+str((currIndex+1))
 
-        listOfRHSProductions=self.__grammar.getProductionsForAGivenNonTerminal(AJ[0])
+        listOfRHSProductions=self.__grammar.getProductionsForAGivenNonTerminal(AJ_splitted[0])
         usedProduction = listOfRHSProductions[currIndex].copy()
         if len(listOfRHSProductions)>currIndex+1:
             self.__s="q"
@@ -124,6 +124,7 @@ class RecDescParser:
         # output.build(self.__workingStack)
         # output.printOutput()
 
-        output = Tree(copy.deepcopy(self.__workingStack),self.__grammar)
+        output = Tree(copy.deepcopy(self.__workingStack),self.__grammar,"filename.txt")
         output.constructTree()
         output.printResult()
+        output.writeToFile()

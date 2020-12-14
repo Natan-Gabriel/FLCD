@@ -93,6 +93,10 @@ class Grammar:
 def menu():
     gr = Grammar("Seminar7.txt")
     recDescParser= RecDescParser(gr)
+
+    gr1 = Grammar("g2.txt")
+    recDescParser1 = RecDescParser(gr1)
+
     while True:
         print("Choose a case")
         print("1.Display the nonterminals")
@@ -101,7 +105,9 @@ def menu():
         print("4.Display the productions for a given nonterminal")
         print("5.Display the starting symbol")
         print("6.Verify if a sequence is accepted by the gr")
-        print("7.Exit")
+        print("7.Verify if a sequence is accepted by the gr(from file,seminar)")
+        print("8.Verify if a sequence is accepted by the gr(from file,toy language)")
+        print("9.Exit")
         case = input()
         if case == "1":
             print(gr.getNonTerminals())
@@ -120,8 +126,26 @@ def menu():
             sequence = input("Input a sequence:")
             recDescParser.parse(sequence)
         elif case == "7":
+            f = open('seq.txt', "r")
+            sequence = f.read()
+            recDescParser.parse(sequence)
+        elif case == "8":
+            sequence=readFile()
+            recDescParser1.parse(sequence)
+        elif case == "9":
             break
         else:
             print("Invalid case")
+
+def readFile():
+    f = open('PIF.out', "r")
+    finalSequence=""
+    sequence = f.readlines()
+    for i in sequence:
+        finalSequence+=i.split("->")[0].strip()
+        finalSequence +=" "
+    print("finalSequence:",finalSequence)
+    return finalSequence
+
 
 menu()

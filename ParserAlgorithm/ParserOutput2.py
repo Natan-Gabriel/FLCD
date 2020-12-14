@@ -30,13 +30,14 @@ class TreeNode:
 
 
 class Tree:
-    def __init__(self,workingStack,grammar):
+    def __init__(self,workingStack,grammar,filename):
         self.workingStack=workingStack
         self.grammar = grammar
         self.current_index=1
         self.resultNodes=[]
         self.index=1
         self.queue=[]
+        self.filename=filename
 
     def constructTree(self):
         root = TreeNode(self.workingStack[0])
@@ -103,6 +104,29 @@ class Tree:
         for row in self.resultNodes:
             row = "".join(element.ljust(column_width + 2) for element in [str(row.index),str(row.val),str(row.parent),str(row.sibling)] if element!=None)
             print(row)
+
+    def writeToFile(self):
+        f = open(self.filename, "w")
+
+
+        length_list = [len(element) for row in self.resultNodes for element in
+                       [str(row.index), str(row.val), str(row.parent), str(row.sibling)] + ['Index', 'Node',
+                                                                                            'Father', 'Sibling'] if
+                       element != None]
+        column_width = max(length_list)
+
+        row = "".join(element.ljust(column_width + 2) for element in
+                      ['Index', 'Node', 'Father', 'Sibling'] if element != None)
+        f.write(row)
+        f.write("\n")
+
+        for row in self.resultNodes:
+            row = "".join(element.ljust(column_width + 2) for element in
+                          [str(row.index), str(row.val), str(row.parent), str(row.sibling)] if element != None)
+            f.write(row)
+            f.write('\n')
+
+        f.close()
 
 
 
