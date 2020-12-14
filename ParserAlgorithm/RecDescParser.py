@@ -1,3 +1,5 @@
+from ParserOutputTerno import ParserOutput
+
 class RecDescParser:
 
     def __init__(self, grammar):
@@ -113,8 +115,9 @@ class RecDescParser:
         else:
             print("Accepted sequence")
             print(self.__workingStack)
-            #self.buildOutput()
+            self.buildOutput()
 
     def buildOutput(self):
-        output = ParserOutput(self.__grammar, self.__workingStack)
+        output = ParserOutput(self.__grammar)
+        output.build(self.__workingStack)
         output.printOutput()
