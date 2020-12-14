@@ -5,19 +5,21 @@ E = {{ + , -, *, /  ,% ,(arithmetic) , < , <=  , >=  ,>  , != ,  =,    &&, || , 
      (,), [ ,] ,{, } ,  ; , space,
      char ,int,  string , boolean, array  ,  for, while, if,  else  ,elif ,  of ,program, read, print  }} ;;
 
-P = {{ program ->  stmtlist ,
+P = {{ program -> stmtlist ,
 
-decllist -> declaration | declaration ; decllist ,
+decllist -> declaration ; decllist | declaration   ,
 
-declaration -> type  identifier  ; ,
+declaration -> type identifier ; ,
+
+type -> int | type1 | arraydecl ,
 
 type1 ->  int | BOOLEAN  |  STRING  |  INTEGER   ,
 
 arraydecl ->  ARRAY   (  type1  )    [  const  ]   ,
 
-type -> type1 | arraydecl ,
 
-stmtlist -> stmt | stmt ; stmtlist ,
+
+stmtlist -> stmt ; | stmt ; stmtlist ,
 
 stmt -> simplstmt | structstmt  ,
 
@@ -45,7 +47,7 @@ LogicOPERATOR ->  &&   |  ||  ,
 
 relation ->  <  |  <=  |  =  | ==  |  !=  |  >=  |  >  ,
 
- identifier -> digit ,
+ identifier -> 1 ,
  letter ->  A  |  B  | . ..|  Z  |  a | b  | .. |  z  ,
  digit ->  0  |  1  |...|  9  ,
 

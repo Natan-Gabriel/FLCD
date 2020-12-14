@@ -71,7 +71,7 @@ class RecDescParser:
 
 
     def parse(self, sequence):
-        w = sequence.split()
+        sequence = sequence.split()
         initialLength=len(sequence)
         self.__s = "q"
         self.__i = 1

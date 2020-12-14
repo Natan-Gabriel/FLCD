@@ -91,7 +91,7 @@ class Grammar:
 
 
 def menu():
-    gr = Grammar("Seminar7.txt")
+    gr = Grammar("g2.txt")
     recDescParser= RecDescParser(gr)
 
     gr1 = Grammar("g2.txt")
