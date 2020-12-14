@@ -42,9 +42,9 @@ class TreeNode:
 
 
 class Tree:
-    def __init__(self, data,workingStack,grammar):
+    def __init__(self,workingStack,grammar):
         self.workingStack=workingStack
-        self.data = data
+        self.data = []
         self.children = None
         self.grammar = grammar
         self.nodes=[]
@@ -58,7 +58,6 @@ class Tree:
         self.nodes.append(new_node)
         self.constructTreeRecursively(new_node)
         self.parseTree(new_node)
-        self.printResult()
 
     def constructTreeRecursively(self,node):
         data=node.data.split("_")

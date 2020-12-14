@@ -1,4 +1,6 @@
 from ParserOutputTerno import ParserOutput
+from ParserOutput2  import Tree
+import copy
 
 class RecDescParser:
 
@@ -118,6 +120,10 @@ class RecDescParser:
             self.buildOutput()
 
     def buildOutput(self):
-        output = ParserOutput(self.__grammar)
-        output.build(self.__workingStack)
-        output.printOutput()
+        # output = ParserOutput(self.__grammar)
+        # output.build(self.__workingStack)
+        # output.printOutput()
+
+        output = Tree(copy.deepcopy(self.__workingStack),self.__grammar)
+        output.constructTree()
+        output.printResult()
