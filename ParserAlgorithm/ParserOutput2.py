@@ -1,5 +1,3 @@
-import copy
-
 class Node:
     def __init__(self, index, val, parent, sibling):
         self.index = index
@@ -18,17 +16,7 @@ class Node:
         else:
             msg += " and no sibling. "
         return msg
-    def __repr__(self):
-        msg = "Node nr " + str(self.index) + " with value " + str(self.val)
-        if self.parent:
-            msg += ", parent " + str(self.parent)
-        else:
-            msg += ", no parent"
-        if self.sibling:
-            msg += " and sibling " + str(self.sibling)
-        else:
-            msg += " and no sibling. "
-        return msg
+
 
 class TreeNode:
     def __init__(self, data):
@@ -44,20 +32,16 @@ class TreeNode:
 class Tree:
     def __init__(self,workingStack,grammar):
         self.workingStack=workingStack
-        self.data = []
-        self.children = None
         self.grammar = grammar
-        self.nodes=[]
         self.current_index=1
         self.resultNodes=[]
         self.index=1
         self.queue=[]
 
     def constructTree(self):
-        new_node = TreeNode(self.workingStack[0])
-        self.nodes.append(new_node)
-        self.constructTreeRecursively(new_node)
-        self.parseTree(new_node)
+        root = TreeNode(self.workingStack[0])
+        self.constructTreeRecursively(root)
+        self.parseTree(root)
 
     def constructTreeRecursively(self,node):
         data=node.data.split("_")
@@ -70,24 +54,21 @@ class Tree:
 
         while number_of_elements>0:
             if self.workingStack[self.current_index] in self.grammar.getTerminals():
-                new_node=TreeNode(self.workingStack[self.current_index])
-                node.children.append(new_node)
-                self.nodes.append(new_node)
-                number_of_elements-=1
-                self.current_index+=1
-            else:
                 curr_elem=self.workingStack[self.current_index]
-                self.current_index += 1
                 new_node=TreeNode(curr_elem)
-                self.nodes.append(new_node)
-                self.constructTreeRecursively(new_node)
                 node.children.append(new_node)
                 number_of_elements -= 1
+                self.current_index += 1
+            else:
+                curr_elem=self.workingStack[self.current_index]
+                new_node=TreeNode(curr_elem)
+                node.children.append(new_node)
+                number_of_elements -= 1
+                self.current_index += 1
+                self.constructTreeRecursively(new_node)
 
-            if(number_of_elements==0):
-                return
 
-    def parseTree(self,tree_node):
+    def parseTree(self,tree_node):  # kind of BFS algorithm
         dict={}
 
         new_node = Node(self.index, tree_node, None, None)
