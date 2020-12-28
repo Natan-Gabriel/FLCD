@@ -1,6 +1,9 @@
-int a=read ();
-int b= read();
-int c= read ();
+int a;
+a = 7;
+int b;
+b=7;
+int c;
+c = 7;
 if(a>=b && a>=c){
  print("the maximum number is a");
 }
@@ -9,5 +12,5 @@ elif(b>=a && b>=c){
 }
 else{
  print("the maximum number is c");
-}
+};
 

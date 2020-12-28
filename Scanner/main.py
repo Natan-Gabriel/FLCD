@@ -146,13 +146,13 @@ class Scanner:
 
     def getOperator(self,line,index): #look-ahead
         if ( index+1<len(line) ) and ( line[index] in operators ) and ( line[index+1] in operators ) and ( line[index]+line[index+1] in operators ):
-            return tokens[line[index]+line[index+1]],line,index+2
+            return line[index]+line[index+1],line,index+2
         #elif ( index+1<len(line) ) and ( line[index] in separators ) and ( line[index+1] in separators ) and  ( line[index]+line[index+1] not in separators ):
         #    return line,index+1
         elif line[index] in operators:
-            return tokens[line[index]],line,index+1
+            return line[index],line,index+1
         elif ( index+1<len(line) ) and ( (line[index]+line[index+1]) in operators ):
-            return tokens[line[index]+line[index+1]],line,index+2
+            return line[index]+line[index+1],line,index+2
 
 
     def isReservedWord(self,line,index):
@@ -171,8 +171,8 @@ class Scanner:
             word+=line[index]
             index+=1
             if word in reservedWords:
-                return tokens[word], line, index
-        return tokens[word],line,index
+                return word, line, index
+        return word,line,index
 
 
     def isNumber(self, line, index):
@@ -239,7 +239,7 @@ class Scanner:
         while index<len(line):
             #print("line")
             if line[index] in separators:  # is separator
-                self.__pif.genPIF(tokens[line[index]], 0)
+                self.__pif.genPIF(line[index], 0) #self.__pif.genPIF(tokens[line[index]], 0)
                 #print("adding "+line[index] +" to separators")
                 index+=1
             elif line[index] in extendedOperators and self.isOperator(line,index): #is operator
@@ -297,7 +297,7 @@ class Scanner:
 
 
 
-scanner = Scanner('p1.in')
+scanner = Scanner('p3.in')
 scanner.getTokens()
 print("PIF: ",scanner.getPIF())
 print("ST: ",scanner.getST())
