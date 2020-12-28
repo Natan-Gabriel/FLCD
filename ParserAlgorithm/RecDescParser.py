@@ -4,12 +4,13 @@ import copy
 
 class RecDescParser:
 
-    def __init__(self, grammar):
+    def __init__(self, grammar,filename):
         self.__s = "q"
         self.__i = 1
         self.__workingStack = []
         self.__inputStack = []
         self.__grammar = grammar
+        self.__filename = filename
 
 
     def expand(self):
@@ -130,61 +131,12 @@ class RecDescParser:
             print(self.__workingStack)
             self.buildOutput()
 
-    # def parse(self, sequence):
-    #     sequence = sequence.split()
-    #     initialLength=len(sequence)
-    #     self.__s = "q"
-    #     self.__i = 1
-    #     self.__workingStack = []
-    #     self.__inputStack = [self.__grammar.getStartingSymbol()]
-    #     while self.__s!="f" and self.__s!="e":
-    #         if self.__s == "q":
-    #             if len(self.__inputStack) == 0 and self.__i == initialLength+1:
-    #                 self.success()
-    #                 print("success")
-    #             else:
-    #                 if self.__inputStack[0] in self.__grammar.getNonTerminals():
-    #
-    #                     self.expand()
-    #                     print("expand")
-    #                     print("self.__workingStack: ", self.__workingStack)
-    #                     print("self.__inputStack: " , self.__inputStack)
-    #                 else:
-    #                     if self.__i-1<len(sequence) and self.__inputStack[0] == sequence[self.__i-1]:
-    #                         self.advance()
-    #                         print("advance")
-    #                         print("self.__workingStack: ", self.__workingStack)
-    #                         print("self.__inputStack: ", self.__inputStack)
-    #                     else:
-    #                         self.momentaryInsuccess()
-    #                         print("momentaryInsuccess")
-    #                         print("self.__workingStack: ", self.__workingStack)
-    #                         print("self.__inputStack: ", self.__inputStack)
-    #         elif len(self.__workingStack)>0:
-    #             if self.__s == "b":
-    #                 if  self.__workingStack[-1] in self.__grammar.getTerminals():
-    #                     self.back()
-    #                     print("back")
-    #                     print("self.__workingStack: ", self.__workingStack)
-    #                     print("self.__inputStack: ", self.__inputStack)
-    #                 else:
-    #                     self.anotherTry()
-    #                     print("anotherTry")
-    #                     print("self.__workingStack: ", self.__workingStack)
-    #                     print("self.__inputStack: ", self.__inputStack)
-    #     if self.__s == "e":
-    #         print("ERROR")
-    #     else:
-    #         print("Accepted sequence")
-    #         print(self.__workingStack)
-    #         self.buildOutput()
-
     def buildOutput(self):
         # output = ParserOutput(self.__grammar)
         # output.build(self.__workingStack)
         # output.printOutput()
 
-        output = Tree(copy.deepcopy(self.__workingStack),self.__grammar,"filename.txt")
+        output = Tree(copy.deepcopy(self.__workingStack),self.__grammar,self.__filename)
         output.constructTree()
         output.printResult()
         output.writeToFile()

@@ -91,11 +91,15 @@ class Grammar:
 
 
 def menu():
-    gr = Grammar("Seminar7.txt")
-    recDescParser= RecDescParser(gr)
+    # gr = Grammar("g1.txt")
+    # recDescParser= RecDescParser(gr, 'out1.txt')
+    #
+    # pif='seq.txt'
 
-    gr1 = Grammar("g2.txt")
-    recDescParser1 = RecDescParser(gr1)
+    gr = Grammar("g2.txt")
+    recDescParser = RecDescParser(gr, 'out2.txt')
+
+    pif = 'PIF.out'
 
     while True:
         print("Choose a case")
@@ -110,35 +114,35 @@ def menu():
         print("9.Exit")
         case = input()
         if case == "1":
-            print(gr1.getNonTerminals())
+            print(gr.getNonTerminals())
         elif case == "2":
-            print(gr1.getTerminals())
+            print(gr.getTerminals())
         elif case == "3":
-            print(gr1.getProductions())
-            print(len(gr1.getProductions()))
+            print(gr.getProductions())
+            print(len(gr.getProductions()))
         elif case == "4":
             nonterminal=input("Input a nonterminal:")
-            print(gr1.getProductionsForAGivenNonTerminal(nonterminal))
-            print(len(gr1.getProductionsForAGivenNonTerminal(nonterminal)))
+            print(gr.getProductionsForAGivenNonTerminal(nonterminal))
+            print(len(gr.getProductionsForAGivenNonTerminal(nonterminal)))
         elif case == "5":
-            print(gr1.getStartingSymbol())
+            print(gr.getStartingSymbol())
         elif case == "6":
             sequence = input("Input a sequence:")
             recDescParser.parse(sequence)
         elif case == "7":
-            f = open('seq.txt', "r")
+            f = open(pif, "r")
             sequence = f.read()
             recDescParser.parse(sequence)
         elif case == "8":
-            sequence=readFile()
-            recDescParser1.parse(sequence)
+            sequence=readFile(pif)
+            recDescParser.parse(sequence)
         elif case == "9":
             break
         else:
             print("Invalid case")
 
-def readFile():
-    f = open('PIFp3.out', "r")
+def readFile(pif):
+    f = open(pif, "r")
     finalSequence=""
     sequence = f.readlines()
     for i in sequence:
