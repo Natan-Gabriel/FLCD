@@ -44,7 +44,7 @@ elseIfBranches -> elif ( condition ) { stmtlist } | elif ( condition ) { stmtlis
 
 elseBranch -> else { stmtlist } ,
 
-whilestmt  -> while ( condition ) { stmt } ,
+whilestmt  -> while ( condition ) { stmtlist } ,
 
 simplecondition -> expression relation expression ,
 
