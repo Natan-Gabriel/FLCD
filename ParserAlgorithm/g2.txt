@@ -1,7 +1,7 @@
 N = {{program,decllist,declaration,type1,arraydecl,type,stmtlist,
     stmt,simplstmt,assignstmt,expression,term,factor,iostmt,structstmt,
      ifstmt, whilestmt,simplecondition,condition,LogicOPERATOR,relation,
-     identifier,letter,digit,string}} ;;
+     identifier,letter,digit,const,elseIfBranches,elseBranch}} ;;
 E = {{ + , -, *, /  ,% ,(arithmetic) , < , <=  , >=  ,>  , != ,  =,    &&, || , !  , == ,
      (,), [ ,] ,{, } ,  ; , space,
      char ,int,  string , boolean, array  ,  for, while, if,  else  ,elif ,  of ,program, read, print, 1, 0}} ;;
@@ -12,61 +12,50 @@ decllist -> declaration ; decllist | declaration   ,
 
 declaration -> type identifier  ,
 
-type -> int | type1 | arraydecl ,
+type -> type1 | arraydecl ,
 
-type1 ->  int | BOOLEAN  |  STRING  |  INTEGER   ,
+type1 -> int | boolean | string ,
 
-arraydecl ->  ARRAY   (  type1  )    [  const  ]   ,
-
-
+arraydecl -> array ( type1 ) [ const ] ,
 
 stmtlist -> stmt ; | stmt ; stmtlist ,
 
-stmt -> simplstmt | structstmt  ,
+stmt -> simplstmt | structstmt ,
 
 simplstmt  -> assignstmt | iostmt |  decllist ,
 
 assignstmt  -> identifier = expression ,
 
-expression -> 0 | 1 | 10,
+expression -> term + expression | term - expression | term,
 
-term  -> term  *  factor | term  /  factor  | factor ,
+term -> factor * term | factor / term | factor ,
 
-factor  ->  (  expression  )  | identifier | const  ,
+factor -> ( expression ) | identifier | const ,
 
-iostmt  -> print ( string ) ; | (  ( READ  |  READINTEGER )  ( )    ; ) |  print ( (identifier | INTEGER | STRING) ) ; ,
+iostmt  -> print ( const ) ; | print ( identifier ) ; | read() ; | readInteger() ; ,
 
 structstmt  -> cmpdstmt | ifstmt | whilestmt ,
 
-ifstmt  ->  if ( condition ) { stmt } ,
+ifstmt -> if ( condition ) { stmt } | if ( condition ) { stmt } elseIfBranches ,
 
-whilestmt  ->  WHILE   (  condition  )   {  stmt  }  ,
+elseIfBranches -> elif ( condition ) { stmt } | elif ( condition ) { stmt } elseIfBranches | elseBranch,
+
+elseBranch -> else { stmt } ,
+
+whilestmt  -> while ( condition ) { stmt } ,
 
 simplecondition -> expression relation expression ,
-condition  -> simplecondition LogicOPERATOR simplecondition | simplecondition | simplecondition LogicOPERATOR condition,
+
+condition  -> simplecondition LogicOPERATOR condition | simplecondition ,
+
 LogicOPERATOR -> && | || ,
 
 relation -> < | <= | = | == | != | >= | > ,
 
+identifier -> 1,
 
- identifier -> 1,
+const-> 0
 
- letterOrDigit -> letter | digit | letterOrDigit | digit letterOrDigit | letter letterOrDigit,
-
- letter ->  A  |  B  | . ..|  Z  |  a | b  | .. |  z  ,
- digit -> 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 ,
-
- nonzerodigit ->  1  |...|  9  ,
-const-> 0 |  + no | - no | no ,
-no-> nonzerodigit { digit },
-
-character -> 'letter' | 'digit',
-
-string -> 0 | stringformat ,
-stringformat -> char { stringformat },
-char -> letter | digit
-
-
-    }} ;;
+}} ;;
 
 S = {{ program }} ;;

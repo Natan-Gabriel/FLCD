@@ -50,6 +50,7 @@ class Tree:
         if(data[0]==node.data):
             prod_number=0
         else:
+            # print(data,"aici",data[1])
             prod_number = int(data[1])
         number_of_elements=len(self.grammar.getProductionsForAGivenNonTerminal(prod)[prod_number])
 

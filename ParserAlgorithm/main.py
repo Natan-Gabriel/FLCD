@@ -64,7 +64,7 @@ class Grammar:
                     transition = elem.split("->")
                     lhs = transition[0].strip()
                     rhs = transition[1].strip()
-                    rhs = rhs.split("|")
+                    rhs = rhs.split(" | ")
                     print("rhs",rhs)
                     for i in rhs:
                         # if i not in self.__productions:
