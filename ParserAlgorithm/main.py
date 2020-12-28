@@ -91,7 +91,7 @@ class Grammar:
 
 
 def menu():
-    gr = Grammar("g2.txt")
+    gr = Grammar("Seminar7.txt")
     recDescParser= RecDescParser(gr)
 
     gr1 = Grammar("g2.txt")
@@ -110,18 +110,18 @@ def menu():
         print("9.Exit")
         case = input()
         if case == "1":
-            print(gr.getNonTerminals())
+            print(gr1.getNonTerminals())
         elif case == "2":
-            print(gr.getTerminals())
+            print(gr1.getTerminals())
         elif case == "3":
-            print(gr.getProductions())
-            print(len(gr.getProductions()))
+            print(gr1.getProductions())
+            print(len(gr1.getProductions()))
         elif case == "4":
             nonterminal=input("Input a nonterminal:")
-            print(gr.getProductionsForAGivenNonTerminal(nonterminal))
-            print(len(gr.getProductionsForAGivenNonTerminal(nonterminal)))
+            print(gr1.getProductionsForAGivenNonTerminal(nonterminal))
+            print(len(gr1.getProductionsForAGivenNonTerminal(nonterminal)))
         elif case == "5":
-            print(gr.getStartingSymbol())
+            print(gr1.getStartingSymbol())
         elif case == "6":
             sequence = input("Input a sequence:")
             recDescParser.parse(sequence)
@@ -142,8 +142,12 @@ def readFile():
     finalSequence=""
     sequence = f.readlines()
     for i in sequence:
-        finalSequence+=i.split("->")[0].strip()
-        finalSequence +=" "
+        aux = i.split("->")[0].strip()
+        print("aux:",aux,"1")
+        if aux != "":
+            finalSequence+=aux
+            finalSequence +=" "
+    finalSequence = finalSequence.strip()
     print("finalSequence:",finalSequence)
     return finalSequence
 

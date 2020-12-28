@@ -42,6 +42,11 @@ class RecDescParser:
         new_AJ=AJ_splitted[0]+"_"+str((currIndex+1))
 
         listOfRHSProductions=self.__grammar.getProductionsForAGivenNonTerminal(AJ_splitted[0])
+        # print("listOfRHSProductions[currIndex]",currIndex,"",listOfRHSProductions[currIndex])
+        # if type(listOfRHSProductions[currIndex]) is list:
+        #     usedProduction = listOfRHSProductions[currIndex].copy()
+        # else:
+        #     usedProduction=[]
         usedProduction = listOfRHSProductions[currIndex].copy()
         if len(listOfRHSProductions)>currIndex+1:
             self.__s="q"
@@ -69,28 +74,34 @@ class RecDescParser:
         self.__s = "f"
 
 
-
     def parse(self, sequence):
-        sequence = sequence.split()
-        initialLength=len(sequence)
+        # w = sequence.split()
+        sequence = sequence.split(" ")
+        print("sequence: ",sequence)
+        # print("w: ",w)
+        initialLength = len(sequence)
         self.__s = "q"
         self.__i = 1
         self.__workingStack = []
         self.__inputStack = [self.__grammar.getStartingSymbol()]
-        while self.__s!="f" and self.__s!="e":
+        while self.__s != "f" and self.__s != "e":
             if self.__s == "q":
-                if len(self.__inputStack) == 0 and self.__i == initialLength+1:
+                # print("len(self.__inputStack): ",len(self.__inputStack))
+                # print("self.__i: ",self.__i)
+                # print("initialLength: ",initialLength)
+                if len(self.__inputStack) == 0 and self.__i == initialLength + 1:
                     self.success()
                     print("success")
                 else:
-                    if self.__inputStack[0] in self.__grammar.getNonTerminals():
+                    # print(self.__inputStack[0],"aici",self.__inputStack[0] in self.__grammar.getNonTerminals())
+                    if len(self.__inputStack) > 0 and self.__inputStack[0] in self.__grammar.getNonTerminals():
 
                         self.expand()
                         print("expand")
                         print("self.__workingStack: ", self.__workingStack)
-                        print("self.__inputStack: " , self.__inputStack)
+                        print("self.__inputStack: ", self.__inputStack)
                     else:
-                        if self.__i-1<len(sequence) and self.__inputStack[0] == sequence[self.__i-1]:
+                        if len(self.__inputStack) > 0 and self.__i - 1 < len(sequence) and self.__inputStack[0] == sequence[self.__i - 1]:
                             self.advance()
                             print("advance")
                             print("self.__workingStack: ", self.__workingStack)
@@ -100,9 +111,9 @@ class RecDescParser:
                             print("momentaryInsuccess")
                             print("self.__workingStack: ", self.__workingStack)
                             print("self.__inputStack: ", self.__inputStack)
-            elif len(self.__workingStack)>0:
+            elif len(self.__workingStack) > 0:
                 if self.__s == "b":
-                    if  self.__workingStack[-1] in self.__grammar.getTerminals():
+                    if self.__workingStack[-1] in self.__grammar.getTerminals():
                         self.back()
                         print("back")
                         print("self.__workingStack: ", self.__workingStack)
@@ -118,6 +129,55 @@ class RecDescParser:
             print("Accepted sequence")
             print(self.__workingStack)
             self.buildOutput()
+
+    # def parse(self, sequence):
+    #     sequence = sequence.split()
+    #     initialLength=len(sequence)
+    #     self.__s = "q"
+    #     self.__i = 1
+    #     self.__workingStack = []
+    #     self.__inputStack = [self.__grammar.getStartingSymbol()]
+    #     while self.__s!="f" and self.__s!="e":
+    #         if self.__s == "q":
+    #             if len(self.__inputStack) == 0 and self.__i == initialLength+1:
+    #                 self.success()
+    #                 print("success")
+    #             else:
+    #                 if self.__inputStack[0] in self.__grammar.getNonTerminals():
+    #
+    #                     self.expand()
+    #                     print("expand")
+    #                     print("self.__workingStack: ", self.__workingStack)
+    #                     print("self.__inputStack: " , self.__inputStack)
+    #                 else:
+    #                     if self.__i-1<len(sequence) and self.__inputStack[0] == sequence[self.__i-1]:
+    #                         self.advance()
+    #                         print("advance")
+    #                         print("self.__workingStack: ", self.__workingStack)
+    #                         print("self.__inputStack: ", self.__inputStack)
+    #                     else:
+    #                         self.momentaryInsuccess()
+    #                         print("momentaryInsuccess")
+    #                         print("self.__workingStack: ", self.__workingStack)
+    #                         print("self.__inputStack: ", self.__inputStack)
+    #         elif len(self.__workingStack)>0:
+    #             if self.__s == "b":
+    #                 if  self.__workingStack[-1] in self.__grammar.getTerminals():
+    #                     self.back()
+    #                     print("back")
+    #                     print("self.__workingStack: ", self.__workingStack)
+    #                     print("self.__inputStack: ", self.__inputStack)
+    #                 else:
+    #                     self.anotherTry()
+    #                     print("anotherTry")
+    #                     print("self.__workingStack: ", self.__workingStack)
+    #                     print("self.__inputStack: ", self.__inputStack)
+    #     if self.__s == "e":
+    #         print("ERROR")
+    #     else:
+    #         print("Accepted sequence")
+    #         print(self.__workingStack)
+    #         self.buildOutput()
 
     def buildOutput(self):
         # output = ParserOutput(self.__grammar)

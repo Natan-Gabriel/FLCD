@@ -1,15 +1,16 @@
 N = {{program,decllist,declaration,type1,arraydecl,type,stmtlist,
     stmt,simplstmt,assignstmt,expression,term,factor,iostmt,structstmt,
-     ifstmt, whilestmt,simplecondition,condition,LogicOPERATOR,relation }} ;;
+     ifstmt, whilestmt,simplecondition,condition,LogicOPERATOR,relation,
+     identifier,letter,digit,string}} ;;
 E = {{ + , -, *, /  ,% ,(arithmetic) , < , <=  , >=  ,>  , != ,  =,    &&, || , !  , == ,
      (,), [ ,] ,{, } ,  ; , space,
-     char ,int,  string , boolean, array  ,  for, while, if,  else  ,elif ,  of ,program, read, print  }} ;;
+     char ,int,  string , boolean, array  ,  for, while, if,  else  ,elif ,  of ,program, read, print, 1, 0}} ;;
 
 P = {{ program -> stmtlist ,
 
 decllist -> declaration ; decllist | declaration   ,
 
-declaration -> type identifier ; ,
+declaration -> type identifier  ,
 
 type -> int | type1 | arraydecl ,
 
@@ -25,31 +26,35 @@ stmt -> simplstmt | structstmt  ,
 
 simplstmt  -> assignstmt | iostmt |  decllist ,
 
-assignstmt  -> identifier  =  expression  ;  ,
+assignstmt  -> identifier = expression ,
 
-expression  -> expression  +  term | expression  -  term | term ,
+expression -> 0 | 1 | 10,
 
 term  -> term  *  factor | term  /  factor  | factor ,
 
 factor  ->  (  expression  )  | identifier | const  ,
 
-iostmt  ->  (  ( READ  |  READINTEGER )  ( )    ; ) |  PRINT   (  (identifier | INTEGER | STRING)   )   ;  ,
+iostmt  -> print ( string ) ; | (  ( READ  |  READINTEGER )  ( )    ; ) |  print ( (identifier | INTEGER | STRING) ) ; ,
 
 structstmt  -> cmpdstmt | ifstmt | whilestmt ,
 
-ifstmt  ->  IF   (  condition  )   {  stmt  }  {  ELIF   (  condition  )    {  stmt  }   }  [ ELSE   {  stmt  }  ] ,
+ifstmt  ->  if ( condition ) { stmt } ,
 
 whilestmt  ->  WHILE   (  condition  )   {  stmt  }  ,
 
-simplecondition  -> expression relation expression ,
-condition  -> simplecondition { LogicOPERATOR simplecondition } ,
-LogicOPERATOR ->  &&   |  ||  ,
+simplecondition -> expression relation expression ,
+condition  -> simplecondition LogicOPERATOR simplecondition | simplecondition | simplecondition LogicOPERATOR condition,
+LogicOPERATOR -> && | || ,
 
-relation ->  <  |  <=  |  =  | ==  |  !=  |  >=  |  >  ,
+relation -> < | <= | = | == | != | >= | > ,
 
- identifier -> 1 ,
+
+ identifier -> 1,
+
+ letterOrDigit -> letter | digit | letterOrDigit | digit letterOrDigit | letter letterOrDigit,
+
  letter ->  A  |  B  | . ..|  Z  |  a | b  | .. |  z  ,
- digit ->  0  |  1  |...|  9  ,
+ digit -> 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 ,
 
  nonzerodigit ->  1  |...|  9  ,
 const-> 0 |  + no | - no | no ,
@@ -57,7 +62,7 @@ no-> nonzerodigit { digit },
 
 character -> 'letter' | 'digit',
 
-string ->  stringformat ,
+string -> 0 | stringformat ,
 stringformat -> char { stringformat },
 char -> letter | digit
 
