@@ -1,7 +1,7 @@
 N = {{program,decllist,declaration,type1,arraydecl,type,stmtlist,
     stmt,simplstmt,assignstmt,expression,term,factor,iostmt,structstmt,
      ifstmt, whilestmt,simplecondition,condition,LogicOPERATOR,relation,
-     identifier,letter,digit,const,elseIfBranches,elseBranch}} ;;
+     identifier,letter,digit,const,elseIfBranches,elseBranch,istmt}} ;;
 E = {{ + , -, *, /  ,% ,(arithmetic) , < , <=  , >=  ,>  , != ,  =,    &&, || , !  , == ,
      (,), [ ,] ,{, } ,  ; , space,
      char ,int,  string , boolean, array  ,  for, while, if,  else  ,elif ,  of ,program, read, print, 1, 0}} ;;
@@ -24,23 +24,25 @@ stmt -> simplstmt | structstmt ,
 
 simplstmt  -> assignstmt | iostmt |  decllist ,
 
-assignstmt  -> identifier = expression ,
+assignstmt  -> identifier = expression | identifier = istmt ,
 
 expression -> term + expression | term - expression | term,
 
-term -> factor * term | factor / term | factor ,
+term -> factor * term | factor / term | factor % term | factor ,
 
 factor -> ( expression ) | identifier | const ,
 
-iostmt  -> print ( const ) ; | print ( identifier ) ; | read() ; | readInteger() ; ,
+iostmt  -> print ( const ) | print ( identifier ) | istmt ,
+
+istmt -> read ( ) | readInteger() ; ,
 
 structstmt  -> cmpdstmt | ifstmt | whilestmt ,
 
-ifstmt -> if ( condition ) { stmt } | if ( condition ) { stmt } elseIfBranches ,
+ifstmt -> if ( condition ) { stmtlist } | if ( condition ) { stmtlist } elseIfBranches ,
 
-elseIfBranches -> elif ( condition ) { stmt } | elif ( condition ) { stmt } elseIfBranches | elseBranch,
+elseIfBranches -> elif ( condition ) { stmtlist } | elif ( condition ) { stmtlist } elseIfBranches | elseBranch,
 
-elseBranch -> else { stmt } ,
+elseBranch -> else { stmtlist } ,
 
 whilestmt  -> while ( condition ) { stmt } ,
 

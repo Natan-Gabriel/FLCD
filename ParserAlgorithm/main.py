@@ -138,7 +138,7 @@ def menu():
             print("Invalid case")
 
 def readFile():
-    f = open('PIF.out', "r")
+    f = open('PIFp2.out', "r")
     finalSequence=""
     sequence = f.readlines()
     for i in sequence:
