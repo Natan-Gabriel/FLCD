@@ -125,7 +125,7 @@ class RecDescParser:
                         print("self.__workingStack: ", self.__workingStack)
                         print("self.__inputStack: ", self.__inputStack)
         if self.__s == "e":
-            print("ERROR")
+            print("ERROR at index: " + str(self.__i))
         else:
             print("Accepted sequence")
             print(self.__workingStack)
