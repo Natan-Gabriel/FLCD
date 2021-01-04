@@ -39,4 +39,6 @@ char|int|string|boolean|array|for|while|if|else|elif|of|program|read|print   {pr
 {INTEGER}       {printf("An integer: %s \n", yytext) ;}
 {STIRNG}        {printf("A string: %s \n", yytext) ;}
 
+.			 {printf( "Unrecognized character: %s\n", yytext );}
+
 %%
