@@ -1,0 +1,42 @@
+%{
+//#include "sspascal.tab.h"
+%}
+
+%option noyywrap
+%option caseless
+
+
+DIGIT           [0-9]
+NONZERODIGIT    [1-9]
+LETTER          [A-Za-z]
+CONST           {NONZERODIGIT}*({DIGIT})*
+INTEGER         "0"|[+-]{0,1}{CONST}
+STIRNG          \"("-"|":"|[a-zA-Z0-9 ])*\"
+
+IDENTIFIER      {LETTER}({LETTER}|{DIGIT})*
+OPERATORS       [+-*/%<>=!]|"-"|"<="|">="|"!="|"&&"|"||"|"=="
+SEPARATORS      [()[]{};]|" "
+
+
+
+
+%%
+
+
+"+"|"-"|"*"|"/"|"%"|"<"|"<="|">="|">"|"!="|"="|"&&"|"||"|"!"|"=="    {printf("An operator: %s \n", yytext) ;} 
+
+
+"("|")"|"["|"]"|"{"|"}"|";"|" "      {printf("A separator: %s \n", yytext) ;} 
+
+"\n"      {} 
+
+
+char|int|string|boolean|array|for|while|if|else|elif|of|program|read|print   {printf("A reserved word: %s \n", yytext) ;}
+
+
+{IDENTIFIER}	{printf("An identifier: %s \n", yytext) ;}
+
+{INTEGER}       {printf("An integer: %s \n", yytext) ;}
+{STIRNG}        {printf("A string: %s \n", yytext) ;}
+
+%%
