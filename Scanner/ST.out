@@ -1,10 +1,9 @@
 I have a unique symbol table for identifiers and constants,represented as a hash table
 Position in ST ->  Token  
-(7,0)  ->  Please input n-the number of integers you want to compute the sum of
-(23,0)  ->  The sum of the given numbers is: 
-(48,0)  ->  0
-(48,1)  ->  input
-(49,0)  ->  1
-(85,0)  ->  sum
-(105,0)  ->  i
-(110,0)  ->  n
+(5,0)  ->  the maximum number is a
+(6,0)  ->  the maximum number is b
+(7,0)  ->  the maximum number is c
+(55,0)  ->  7
+(97,0)  ->  a
+(98,0)  ->  b
+(99,0)  ->  c

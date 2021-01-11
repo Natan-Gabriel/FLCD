@@ -297,7 +297,7 @@ class Scanner:
 
 
 
-scanner = Scanner('p3.in')
+scanner = Scanner('p1.in')
 scanner.getTokens()
 print("PIF: ",scanner.getPIF())
 print("ST: ",scanner.getST())

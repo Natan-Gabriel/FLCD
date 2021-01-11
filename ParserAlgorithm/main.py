@@ -91,10 +91,10 @@ class Grammar:
 
 
 def menu():
-    # gr = Grammar("g1.txt")
-    # recDescParser= RecDescParser(gr, 'out1.txt')
-    #
-    # pif='seq.txt'
+    gr = Grammar("g1.txt")
+    recDescParser= RecDescParser(gr, 'out1.txt')
+
+    pif='seq.txt'
 
     gr = Grammar("g2.txt")
     recDescParser = RecDescParser(gr, 'out2.txt')

@@ -1,0 +1,81 @@
+%{
+#include <stdio.h>
+#include <string.h>
+//#include "sspascal.tab.h"
+#include "y.tab.h"
+int lines = 0;
+%}
+
+%option noyywrap
+%option caseless
+
+
+DIGIT           [0-9]
+NONZERODIGIT    [1-9]
+LETTER          [A-Za-z]
+CONST           {NONZERODIGIT}*({DIGIT})*
+integer         "0"|[+-]{0,1}{CONST}
+string          \"("-"|":"|[a-zA-Z0-9 ])*\"
+
+identifier      {LETTER}({LETTER}|{DIGIT})*
+
+
+
+
+
+%%
+
+
+"+"     {printf("An operator: %s \n", yytext) ; return PLUS;} 
+"-"     {printf("An operator: %s \n", yytext) ; return MINUS;} 
+"*"     {printf("An operator: %s \n", yytext) ; return MUL;} 
+"/"     {printf("An operator: %s \n", yytext) ; return DIV;} 
+"%"     {printf("An operator: %s \n", yytext) ; return MOD;} 
+"<"     {printf("An operator: %s \n", yytext) ; return LT;} 
+"<="    {printf("An operator: %s \n", yytext) ; return LE;} 
+">="    {printf("An operator: %s \n", yytext) ; return GE;} 
+">"     {printf("An operator: %s \n", yytext) ; return GT;} 
+"!="    {printf("An operator: %s \n", yytext) ; return NE;} 
+"="     {printf("An operator: %s \n", yytext) ; return ATRIB;} 
+"&&"    {printf("An operator: %s \n", yytext) ; return AND;} 
+"||"    {printf("An operator: %s \n", yytext) ; return OR;} 
+"!"     {printf("An operator: %s \n", yytext) ; return NOT;} 
+"=="    {printf("An operator: %s \n", yytext) ; return EQ;} 
+
+
+"(" {printf("A separator: %s \n", yytext) ;return OPEN_ROUND_BRACKET ;}  
+")" {printf("A separator: %s \n", yytext) ;return CLOSED_ROUND_BRACKET;}  
+"[" {printf("A separator: %s \n", yytext) ;return OPEN_RIGHT_BRACKET;}  
+"]" {printf("A separator: %s \n", yytext) ;return CLOSED_RIGHT_BRACKET;}  
+"{" {printf("A separator: %s \n", yytext) ;return OPEN_CURLY_BRACKET;}  
+"}" {printf("A separator: %s \n", yytext) ;return CLOSED_CURLY_BRACKET;}  
+";" {printf("A separator: %s \n", yytext) ;return SEMI_COLON;}  
+
+
+[ \t]+  	{}
+[\n]+ {lines++;}
+
+
+int     {printf("A reserved word: %s \n", yytext) ;return INT;}
+string  {printf("A reserved word: %s \n", yytext) ;return STRING;}
+boolean {printf("A reserved word: %s \n", yytext) ;return BOOLEAN;}
+array   {printf("A reserved word: %s \n", yytext) ;return ARRAY;}
+for     {printf("A reserved word: %s \n", yytext) ;return FOR;}
+while   {printf("A reserved word: %s \n", yytext) ;return WHILE;}
+if      {printf("A reserved word: %s \n", yytext) ;return IF;}
+else    {printf("A reserved word: %s \n", yytext) ;return ELSE;}
+elif    {printf("A reserved word: %s \n", yytext) ;return ELIF;}
+
+read    {printf("A reserved word: %s \n", yytext) ;return READ;}
+print   {printf("A reserved word: %s \n", yytext) ;return PRINT;}
+
+
+{identifier}	{printf("An identifier: %s \n", yytext) ; return IDENTIFIER;}
+
+{integer}       {printf("An integer: %s \n", yytext) ; return INTEGER;}
+{string}        {printf("A string: %s \n", yytext) ; return STRING;}
+
+
+.			 {printf( "Unrecognized character: %s\n", yytext );}
+
+%%
